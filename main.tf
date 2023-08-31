@@ -27,9 +27,7 @@ resource "aws_subnet" "public-subnet-a" {
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
-    "Name" = (
-      "${local.vpc_name}-public-subnet-a"
-    )
+    "Name"                                        = "${local.vpc_name}-public-subnet-a"
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
     "kubernetes.io/role/elb"                      = "1"
   }
@@ -41,9 +39,7 @@ resource "aws_subnet" "public-subnet-b" {
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
-    "Name" = (
-      "${local.vpc_name}-public-subnet-b"
-    )
+    "Name"                                        = "${local.vpc_name}-public-subnet-b"
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
     "kubernetes.io/role/elb"                      = "1"
   }
@@ -51,13 +47,11 @@ resource "aws_subnet" "public-subnet-b" {
 
 resource "aws_subnet" "private-subnet-a" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnet_a_cidr
+  cidr_block        = var.private_subnet_a_cidr
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
-    "Name" = (
-      "${local.vpc_name}-private-subnet-a"
-    )
+    "Name"                                        = "${local.vpc_name}-private-subnet-a"
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb"             = "1"
   }
@@ -65,7 +59,7 @@ resource "aws_subnet" "private-subnet-a" {
 
 resource "aws_subnet" "private-subnet-b" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnet_b_cidr
+  cidr_block        = var.private_subnet_b_cidr
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
