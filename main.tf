@@ -66,9 +66,7 @@ resource "aws_subnet" "private-subnet-b" {
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
-    "Name" = (
-      "${local.vpc_name}-private-subnet-b"
-    )
+    "Name"                                        = "${local.vpc_name}-private-subnet-b"
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb"             = "1"
   }
@@ -174,4 +172,17 @@ resource "aws_route_table_association" "private-a-association" {
 resource "aws_route_table_association" "private-b-association" {
   subnet_id      = aws_subnet.private-subnet-b.id
   route_table_id = aws_route_table.private-route-b.id
+}
+
+# Create a Route 53 zone for DNS support inside the VPC
+resource "aws_route53_zone" "private-zone" {
+  # AWS requires a lowercase name. 
+  #name = "lower(${var.env_name}.${var.vpc_name}.com)"
+  name = "${var.env_name}.${var.vpc_name}.com"
+  #name = "testing.com"
+  force_destroy = true
+
+  vpc {
+    vpc_id = aws_vpc.main.id
+  }
 }
